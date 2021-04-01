@@ -1,0 +1,43 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Server side for cookBook app",
+  "main": "./src/server.ts",
+  "scripts": {
+    "start": "ts-node ./src/server.ts",
+    "dev": "ts-node-dev ./src/server.ts",
+    "lint:start": "nodemon -r ./src/server.ts --exec \"npm run linter && ts-node\"",
+    "linter": "eslint --ext .ts ./src",
+    "typeorm": "node_modules\\.bin\\ts-node node_modules\\typeorm\\cli.js",
+    "add-migration": "node_modules\\.bin\\ts-node node_modules\\typeorm\\cli.js migration:generate -n",
+    "migrate": "node_modules\\.bin\\ts-node node_modules\\typeorm\\cli.js migration:run",
+    "migration-revert": "node_modules\\.bin\\ts-node node_modules\\typeorm\\cli.js migration:revert",
+    "seed": "node_modules\\.bin\\ts-node ./src/data/seeders/fillDb.ts"
+  },
+  "author": "Volodymyr Minchenko",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node-dev": "^1.1.6"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.11",
+    "@types/node": "^14.14.37",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "ts-node": "^9.1.1",
+    "typeorm": "^0.2.32",
+    "typescript": "^4.2.3",
+    "uuid": "^8.3.2"
+  }
+}
