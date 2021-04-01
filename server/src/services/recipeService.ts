@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 
 import { getCustomRepository } from 'typeorm';
@@ -32,10 +33,11 @@ export const getRecipeById = async (id: string): Promise<IRecipe> => {
   return recipe;
 };
 
-export const addRecipe = async (recipe: IRecipe): Promise<IRecipe> => {
+export const addRecipe = async (recipe: IRecipe, parentId?: string): Promise<IRecipe> => {
   const { name, ingredients } = recipe;
   await checkRecipeExistByName(name);
-  const createdRecipe = await getCustomRepository(RecipeRepository).addRecipe(recipe);
+  const extension = parentId ? { parentId } : {};
+  const createdRecipe = await getCustomRepository(RecipeRepository).addRecipe({ ...recipe, ...extension });
   if (!createdRecipe) {
     throw new Error(`Recipe not created, ${HttpStatusCode.NOT_FOUND}`);
   }
@@ -45,9 +47,15 @@ export const addRecipe = async (recipe: IRecipe): Promise<IRecipe> => {
   return createdRecipe;
 };
 
-export const updateRecipe = async (id: string, recipeData: IRecipe): Promise<IRecipe> => {
-  await getRecipeById(id);
-  const editedRecipe = await getCustomRepository(RecipeRepository).updateRecipe(id, recipeData);
+export const cloneRecipe = ({
+  parentId,
+  recipeData
+}: {parentId: string, recipeData: IRecipe}) => addRecipe(recipeData, parentId);
+
+export const updateRecipe = async (previewId: string, recipeData: IRecipe): Promise<IRecipe> => {
+  await getRecipeById(previewId);
+  const { id, ...other } = recipeData;
+  const editedRecipe = await getCustomRepository(RecipeRepository).addRecipe({ ...other, previewId });
   if (!editedRecipe) {
     throw new Error(`Recipe not updated, ${HttpStatusCode.NOT_FOUND}`);
   }

@@ -17,4 +17,10 @@ export class Recipe extends AbstractEntity {
 
   @Column({ nullable: true })
   imageURL: string;
+
+  @Column({ nullable: true })
+  parentId: string;
+
+  @Column({ nullable: true })
+  previewId: string;
 }

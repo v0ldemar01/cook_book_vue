@@ -13,7 +13,7 @@ export class Ingredient extends AbstractEntity {
   @Column()
   type: string;
 
-  @ManyToOne(() => Ingredient, ingredient => ingredient.recipe, {
+  @ManyToOne(() => Recipe, recipe => recipe.ingredients, {
     onDelete: 'CASCADE'
   })
   recipe: Recipe;
