@@ -7,5 +7,6 @@ export interface IRecipe {
   steps: string;
   imageURL?: string;
   parentId?: string;
-  previewId?: string;
+  prevId?: string;
+  nextId?: string;
 }

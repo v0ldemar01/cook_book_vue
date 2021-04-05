@@ -16,7 +16,7 @@ const checkRecipeExistByName = async (name: string): Promise<void> => {
   }
 };
 
-export const getRecipes = async (name?: string): Promise<IRecipe[]> => {
+export const getRecipes = async ({ name }: {name?: string}): Promise<IRecipe[]> => {
   const recipes = await getCustomRepository(RecipeRepository)
     .getRecipes(name);
   if (!recipes) {
@@ -33,11 +33,10 @@ export const getRecipeById = async (id: string): Promise<IRecipe> => {
   return recipe;
 };
 
-export const addRecipe = async (recipe: IRecipe, parentId?: string): Promise<IRecipe> => {
+export const addRecipe = async (recipe: IRecipe): Promise<IRecipe> => {
   const { name, ingredients } = recipe;
   await checkRecipeExistByName(name);
-  const extension = parentId ? { parentId } : {};
-  const createdRecipe = await getCustomRepository(RecipeRepository).addRecipe({ ...recipe, ...extension });
+  const createdRecipe = await getCustomRepository(RecipeRepository).addRecipe(recipe);
   if (!createdRecipe) {
     throw new Error(`Recipe not created, ${HttpStatusCode.NOT_FOUND}`);
   }
@@ -47,19 +46,19 @@ export const addRecipe = async (recipe: IRecipe, parentId?: string): Promise<IRe
   return createdRecipe;
 };
 
-export const cloneRecipe = ({
-  parentId,
-  recipeData
-}: {parentId: string, recipeData: IRecipe}) => addRecipe(recipeData, parentId);
-
-export const updateRecipe = async (previewId: string, recipeData: IRecipe): Promise<IRecipe> => {
-  await getRecipeById(previewId);
+export const updateRecipe = async (prevId: string, recipeData: IRecipe): Promise<IRecipe> => {
+  const prevRecipe = await getRecipeById(prevId);
   const { id, ...other } = recipeData;
-  const editedRecipe = await getCustomRepository(RecipeRepository).addRecipe({ ...other, previewId });
+  const { ingredients, ...others } = prevRecipe;
+  const newRecipe = await getCustomRepository(RecipeRepository).addRecipe({ ...other, prevId });
+  const editedRecipe = await getCustomRepository(RecipeRepository).updateRecipe(prevId, {
+    ...others,
+    nextId: newRecipe.id
+  });
   if (!editedRecipe) {
     throw new Error(`Recipe not updated, ${HttpStatusCode.NOT_FOUND}`);
   }
-  return editedRecipe;
+  return newRecipe;
 };
 
 export const deleteRecipe = async (id: string): Promise<IRecipe> => {

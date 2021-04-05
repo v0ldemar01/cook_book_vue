@@ -22,5 +22,8 @@ export class Recipe extends AbstractEntity {
   parentId: string;
 
   @Column({ nullable: true })
-  previewId: string;
+  prevId: string;
+
+  @Column({ nullable: true })
+  nextId: string;
 }
