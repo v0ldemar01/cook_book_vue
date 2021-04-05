@@ -3,7 +3,7 @@ import { ITreeNode } from "../models/recipe/tree";
 
 export const toTree = (recipes: IRecipe[]) => {
   const resultTree = [] as ITreeNode[];
-
+  recipes.forEach(recipe => mixinIngredientUpdated(recipes, recipe, recipe.ingredients));
   const sortedRecipes = [
     ...recipes.filter((recipe) => !recipe.parentId),
     ...recipes.filter((recipe) => recipe.parentId),
@@ -73,3 +73,13 @@ const getById = (tree: ITreeNode, id: string) => {
     return result;
   }
 };
+
+const mixinIngredientUpdated = (recipes, recipe, ingredients) => {
+  if (recipe.prevId) {
+    const prevRecipe = recipes.find(thisRecipe => thisRecipe.id === recipe.prevId);
+    if (!prevRecipe) return;
+    return mixinIngredientUpdated(recipes, prevRecipe, ingredients)
+  } else {
+    recipe.ingredients = [...ingredients];
+  }
+}
