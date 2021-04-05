@@ -1,34 +1,57 @@
-import { ActionTree } from 'vuex';
-import { ActionRecipeTypes, RecipeActions } from './types/recipeTypes';
-import { RecipeMutationType } from '../mutations/types/recipeTypes';
-import { AppMutationType } from '../mutations/types/appTypes';
-import { IRecipeState } from '../state/recipeState';
-import { IRecipe } from '@/common/models/recipe';
+import { ActionTree } from "vuex";
+import router from "../../router";
+import { ActionRecipeTypes, RecipeActions } from "./types/recipeTypes";
+import { RecipeMutationType } from "../mutations/types/recipeTypes";
+import { AppMutationType } from "../mutations/types/appTypes";
+import { IRecipeState } from "../state/recipeState";
+import {
+  addRecipe,
+  getRecipes,
+  deleteRecipe,
+  updateRecipe,
+} from "@/services/recipeService";
 
-export const recipeActions: ActionTree<IRecipeState, IRecipeState> & RecipeActions = {
-  async [ActionRecipeTypes.GET_RECIPES]({ commit }) {
-    commit(AppMutationType.SHOW_LOADING);    
-    commit(RecipeMutationType.SET_RECIPES, []);
-    commit(AppMutationType.HIDE_LOADING);
+export const recipeActions: ActionTree<IRecipeState, IRecipeState> &
+  RecipeActions = {
+  async [ActionRecipeTypes.GET_RECIPES]({ commit }, name = "") {
+    commit(AppMutationType.SHOW_LOADING);
+    getRecipes(name).then((data) => {
+      commit(RecipeMutationType.SET_RECIPES, data);
+      commit(AppMutationType.HIDE_LOADING);
+    });
   },
   async [ActionRecipeTypes.ADD_RECIPE]({ commit }, recipe) {
-    commit(AppMutationType.SHOW_LOADING);    
-    commit(RecipeMutationType.ADD_RECIPE, recipe);
-    commit(AppMutationType.HIDE_LOADING);
-  },
-  async [ActionRecipeTypes.CLONE_RECIPE]({ commit }, parentId) {
     commit(AppMutationType.SHOW_LOADING);
-    commit(RecipeMutationType.CLONE_RECIPE, {} as IRecipe);
-    commit(AppMutationType.HIDE_LOADING);
+    addRecipe(recipe).then((data) => {
+      commit(RecipeMutationType.ADD_RECIPE, data);
+      commit(AppMutationType.HIDE_LOADING);
+      commit(AppMutationType.SET_HOME);
+      router.push("/");
+    });
+  },
+  async [ActionRecipeTypes.CLONE_RECIPE]({ commit }, recipe) {
+    commit(RecipeMutationType.CLONE_RECIPE, recipe);
+    router.push("/clone");
   },
   async [ActionRecipeTypes.UPDATE_RECIPE]({ commit }, recipe) {
     commit(AppMutationType.SHOW_LOADING);
-    commit(RecipeMutationType.UPDATE_RECIPE, recipe);
-    commit(AppMutationType.HIDE_LOADING);
+    updateRecipe(recipe).then((data) => {
+      commit(RecipeMutationType.UPDATE_RECIPE, data);
+      commit(AppMutationType.HIDE_LOADING);
+    });
   },
   async [ActionRecipeTypes.DELETE_RECIPE]({ commit }, id) {
-    commit(AppMutationType.SHOW_LOADING);
-    commit(RecipeMutationType.DELETE_RECIPE, id);
-    commit(AppMutationType.HIDE_LOADING);
-  }
-}
+    deleteRecipe(id).then(() => {
+      commit(RecipeMutationType.DELETE_RECIPE, id);
+    });
+  },
+  async [ActionRecipeTypes.SET_SELECTED]({ commit }, id) {
+    commit(RecipeMutationType.SET_SELECTED, id);
+  },
+  async [ActionRecipeTypes.CLEAR_SELECTED]({ commit }) {
+    commit(RecipeMutationType.CLEAR_SELECTED);
+  },
+  async [ActionRecipeTypes.CLEAR_CLONE_RECIPE]({ commit }) {
+    commit(RecipeMutationType.CLEAR_CLONE_RECIPE);
+  },
+};

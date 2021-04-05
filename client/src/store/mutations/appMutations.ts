@@ -1,6 +1,6 @@
-import { MutationTree } from 'vuex';
-import { IAppState } from '../state/appState';
-import { AppMutationType } from './types/appTypes';
+import { MutationTree } from "vuex";
+import { IAppState } from "../state/appState";
+import { AppMutationType } from "./types/appTypes";
 
 export type AppMutations = {
   [AppMutationType.SHOW_LOADING](state: IAppState): void;
@@ -11,6 +11,9 @@ export type AppMutations = {
   [AppMutationType.CANCEL_EDITING](state: IAppState): void;
   [AppMutationType.SET_CREATING](state: IAppState): void;
   [AppMutationType.CANCEL_CREATING](state: IAppState): void;
+  [AppMutationType.SET_HOME](state: IAppState): void;
+  [AppMutationType.SET_CLONING](state: IAppState): void;
+  [AppMutationType.CANCEL_CLONING](state: IAppState): void;
 };
 
 export const appMutations: MutationTree<IAppState> & AppMutations = {
@@ -24,7 +27,7 @@ export const appMutations: MutationTree<IAppState> & AppMutations = {
     state.error = error;
   },
   [AppMutationType.CLEAR_ERROR](state) {
-    state.error = '';
+    state.error = "";
   },
   [AppMutationType.SET_EDITING](state) {
     state.isEditing = true;
@@ -35,7 +38,18 @@ export const appMutations: MutationTree<IAppState> & AppMutations = {
   [AppMutationType.SET_CREATING](state) {
     state.isCreating = true;
   },
-  [AppMutationType.CANCEL_CREATING](state: IAppState) {
+  [AppMutationType.CANCEL_CREATING](state) {
     state.isCreating = false;
-  }  
-}
+  },
+  [AppMutationType.SET_HOME](state) {
+    state.isEditing = false;
+    state.isCreating = false;
+    state.isCloning = false;
+  },
+  [AppMutationType.SET_CLONING](state) {
+    state.isCloning = true;
+  },
+  [AppMutationType.CANCEL_CLONING](state) {
+    state.isCloning = false;
+  },
+};
