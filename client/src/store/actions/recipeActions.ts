@@ -31,6 +31,7 @@ export const recipeActions: ActionTree<IRecipeState, IRecipeState> &
   },
   async [ActionRecipeTypes.CLONE_RECIPE]({ commit }, recipe) {
     commit(RecipeMutationType.CLONE_RECIPE, recipe);
+    commit(AppMutationType.SET_CLONING);
     router.push("/clone");
   },
   async [ActionRecipeTypes.UPDATE_RECIPE]({ commit }, recipe) {
@@ -38,6 +39,7 @@ export const recipeActions: ActionTree<IRecipeState, IRecipeState> &
     updateRecipe(recipe).then((data) => {
       commit(RecipeMutationType.UPDATE_RECIPE, data);
       commit(AppMutationType.HIDE_LOADING);
+      router.push("/");
     });
   },
   async [ActionRecipeTypes.DELETE_RECIPE]({ commit }, id) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex justify-content-around container-element">
-      <div class="col-6">
+      <div class="col-6 col-wrap-elem">
         <h2 style="text-align: center">Recipe add form</h2>
         <div class="card">
           <div class="card-body card-body-wrap">
@@ -82,7 +82,7 @@
           </div>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-4 col-wrap-elem">
         <h2 style="text-align: center">Ingredient add form</h2>
         <div class="card">
           <div class="card-body">
@@ -174,7 +174,6 @@ export default defineComponent({
       name: "",
       type: "",
     } as IIngredient);
-
     const resetRecipeForm = () => {
       newRecipe.name = "";
       newRecipe.steps = "";
@@ -195,7 +194,6 @@ export default defineComponent({
         (ingredient) => ingredient.name !== name
       );
     };
-
     const recipeAction = () => {
       if (isEditing.value) {
         store.dispatch(ActionRecipeTypes.UPDATE_RECIPE, newRecipe);
@@ -230,13 +228,23 @@ export default defineComponent({
   },
 });
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .container-element-create {
   height: 92vh;
 }
-.container-element {
-  height: 100%;
+.container-element {  
   padding: 50px 0;
+  flex-wrap: wrap;  
+}
+.col-wrap-elem {
+  min-width: 40%;
+}
+@media (max-width: 880px) {
+  .col-wrap-elem {
+    min-width: 70%; 
+    margin-bottom: 40px;
+    margin-top: -20px;
+  }
 }
 .form-group-margin {
   margin: 1rem auto;

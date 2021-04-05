@@ -72,7 +72,7 @@
       >
         <i
           v-bind:class="[
-            { 'icon-hover': options.deleteNode.appearOnHover },
+            
             styles.deleteNode.class,
           ]"
           :style="styles.deleteNode.style"

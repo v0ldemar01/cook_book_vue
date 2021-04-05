@@ -44,8 +44,7 @@ export default {
     return {
       styles: {
         tree: {
-          height: "auto",
-          maxHeight: "600px",
+          minWidth: "30%",
           overflow: "auto",
         },
       },

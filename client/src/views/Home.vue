@@ -1,15 +1,15 @@
 <template>
   <div clas="container">
-    <div class="d-flex justify-content-around column-container">
-      <div class="spinner" v-if="loading">
-        <PacmanLoader color="red" />
-      </div>
-      <div class="col col-elem" v-else>
+    <div class="spinner" v-if="loading">
+      <PacmanLoader color="red" />
+    </div>
+    <div class="d-flex justify-content-between column-container" v-else>      
+      <div class="col-6 col-elem" >
         <div class="col-element">
           <RecipesList />
         </div>
       </div>
-      <div class="col col-elem">
+      <div class="col-4 col-elem">
         <div class="col-element">
           <RecipeDetail />
         </div>
@@ -36,14 +36,14 @@ export default defineComponent({
   setup() {
     const toast = inject<Toast>("$toast");
     onMounted(() => store.dispatch(ActionAppTypes.SET_HOME));
-    if (toast)
-      toast("Simple!", {
-        duration: 5000,
-        type: "error",
-        positionX: "right",
-        positionY: "bottom",
-        disableClick: true,
-      });
+    // if (toast)
+    //   toast("Simple!", {
+    //     duration: 5000,
+    //     type: "error",
+    //     positionX: "right",
+    //     positionY: "bottom",
+    //     disableClick: true,
+    //   });
     const store = useStore();
     const loading = computed(() => store.getters.loading);
 
@@ -58,11 +58,23 @@ export default defineComponent({
 <style lang="scss">
 .column-container {
   margin: 50px 100px !important;
-}
+  flex-wrap: wrap;
+}  
 .col-elem {
   margin: 0 30px !important;
+  min-width: 270px;
 }
 .col-element {
-  padding: 15px 10px !important;
+  padding: 15px 10px !important;  
+}
+.col-wrap-elem {
+  min-width: 40%;
+}
+@media (max-width: 1000px) {
+  .col-elem {
+    min-width: 85%; 
+    margin: 0 30px !important;
+    flex-wrap: wrap;
+  }
 }
 </style>

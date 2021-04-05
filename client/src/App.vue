@@ -3,8 +3,8 @@
     <nav class="navbar navbar-light bg-warning">
       <div class="container-fluid container-space">
         <router-link to="/"><img :src="image" width="50" /></router-link>
-        <h3 style="color: blue">
-          {{ isHome ? "Your recipes" : "Create recipe" }}
+        <h3 style="color: blue; margin-bottom: 0">
+          {{ isHome ? "Your recipes" : isEditing ? "Edit recipe" : isCloning ? "Create clone recipe" : "Create recipe" }}
         </h3>
         <router-link :to="`${isHome ? '/create' : '/'}`">
           <button class="btn btn-outline-success" type="submit">
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { computed, onMounted, onUpdated, onUnmounted } from "vue";
+import { computed } from "vue";
 import { useStore } from "./store";
 import image from "../public/logo.png";
 
@@ -26,10 +26,14 @@ export default {
   setup() {
     const store = useStore();
     const isHome = computed(() => store.getters.isHome);
+    const isEditing = computed(() => store.getters.isEditing);
+    const isCloning = computed(() => store.getters.isCloning);
 
     return {
       image,
       isHome,
+      isEditing,
+      isCloning
     };
   },
 };

@@ -39,6 +39,9 @@ export const recipeMutations: MutationTree<IRecipeState> & RecipeMutations = {
   },
   [RecipeMutationType.DELETE_RECIPE](state, id: string) {
     state.recipes = state.recipes.filter((recipe) => recipe.id !== id);
+    if (state.currentRecipe.id === id) {
+      state.currentRecipe = {} as IRecipe;
+    }
   },
   [RecipeMutationType.SET_SELECTED](state, id: string) {
     const currentRecipe = state.recipes.find((recipe) => recipe.id === id);
