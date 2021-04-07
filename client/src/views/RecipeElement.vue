@@ -232,16 +232,16 @@ export default defineComponent({
 .container-element-create {
   height: 92vh;
 }
-.container-element {  
+.container-element {
   padding: 50px 0;
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
 }
 .col-wrap-elem {
   min-width: 40%;
 }
 @media (max-width: 880px) {
   .col-wrap-elem {
-    min-width: 70%; 
+    min-width: 70%;
     margin-bottom: 40px;
     margin-top: -20px;
   }

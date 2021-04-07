@@ -4,7 +4,15 @@
       <div class="container-fluid container-space">
         <router-link to="/"><img :src="image" width="50" /></router-link>
         <h3 style="color: blue; margin-bottom: 0">
-          {{ isHome ? "Your recipes" : isEditing ? "Edit recipe" : isCloning ? "Create clone recipe" : "Create recipe" }}
+          {{
+            isHome
+              ? "Your recipes"
+              : isEditing
+              ? "Edit recipe"
+              : isCloning
+              ? "Create clone recipe"
+              : "Create recipe"
+          }}
         </h3>
         <router-link :to="`${isHome ? '/create' : '/'}`">
           <button class="btn btn-outline-success" type="submit">
@@ -33,7 +41,7 @@ export default {
       image,
       isHome,
       isEditing,
-      isCloning
+      isCloning,
     };
   },
 };

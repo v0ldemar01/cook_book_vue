@@ -2,7 +2,7 @@ export interface ITreeNode {
   text: string;
   id: string;
   checkable?: boolean;
-  selectd?: boolean;
+  selected?: boolean;
   expanded?: boolean;
   nodes?: ITreeNode[];
 }

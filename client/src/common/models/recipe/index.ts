@@ -10,4 +10,5 @@ export interface IRecipe {
   prevId?: string;
   nextId?: string;
   createdAt?: string;
+  selected?: boolean;
 }

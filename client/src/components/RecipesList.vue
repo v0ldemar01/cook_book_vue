@@ -1,12 +1,16 @@
 <template>
-  <div v-if="recipes && recipes.length" class="card">
+  <div 
+    class="card" 
+    v-if="recipes && recipes.length"
+  >
     <div class="card-body">
-      <Tree
-        id="my-tree-id"
-        ref="my-tree"
-        :custom-options="myCustomOptions"
-        :nodes="recipes"
-      />
+      <ul class="tree-list">
+        <RecipeListTree 
+          v-for="item in recipes" 
+          :key="item.id" 
+          :item="item"
+        />
+      </ul>
     </div>
   </div>
   <div style="text-align: center" v-else>No recipes</div>
@@ -16,14 +20,14 @@
 import { computed, defineComponent } from "vue";
 import { useStore } from "../store";
 import { toTree } from "../common/helpers/treeHelper";
-import Tree from "./vuejs-tree/Tree.vue";
+import RecipeListTree from "./RecipeListTree.vue";
 import { ActionRecipeTypes } from "../store/actions/types/recipeTypes";
 import { ITreeNode } from "../common/models/recipe/tree";
 
 export default defineComponent({
   name: "RecipesList",
   components: {
-    Tree,
+    RecipeListTree,
   },
   setup() {
     const store = useStore();
@@ -64,3 +68,13 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+ul {
+  padding-left: 0 !important;
+  margin-bottom: 0 !important;
+}
+.tree-list {
+  min-width: 30%;
+  overflow: auto;
+}
+</style>

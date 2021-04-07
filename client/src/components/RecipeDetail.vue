@@ -1,16 +1,34 @@
 <template>
   <div class="card" v-if="!isEmpty">
     <img
+      v-if="currentRecipe.imageURL"
       class="card-img-top"
       :src="currentRecipe.imageURL"
-      alt="Card image cap"
-      v-if="currentRecipe.imageURL"
+      alt="Card image cap"      
     />
     <div class="card-body">
-      <h5 class="card-title">{{ currentRecipe.name }}</h5>
-      <span class="card-element" v-if="currentRecipe.ingredients.length"
-        >Ingredients:</span
+      <div class="d-flex">
+        <h5 
+          class="card-title" 
+          style="float: left;"
+        >
+          {{ currentRecipe.name }}
+        </h5>
+        <div style="padding: 0.25rem" />       
+        <p 
+          class="card-title" 
+          style="float: right;"
+        >
+          {{ Date(currentRecipe.createdAt).toLocaleString({ timeZone: 'Europe/Kiev' }) }}
+        </p>
+      </div>      
+      <span 
+        v-if="currentRecipe.ingredients.length" 
+        class="card-element" 
       >
+        Ingredients:
+      </span
+    >
     </div>
     <ul
       class="list-group list-group-flush"
@@ -29,9 +47,9 @@
       <p />
       <div class="d-flex flex-row justify-content-around">
         <button
-          class="btn btn-danger"
-          @click="selectRecipeId(currentRecipe.prevId)"
           v-if="currentRecipe.prevId"
+          class="btn btn-danger"
+          @click="selectRecipeId(currentRecipe.prevId)"          
         >
           <i class="bi bi-arrow-return-left"></i> Previous version
         </button>
@@ -41,9 +59,9 @@
           </button>
         </router-link>
         <button
-          class="btn btn-danger"
-          @click="selectRecipeId(currentRecipe.nextId)"
           v-if="currentRecipe.nextId"
+          class="btn btn-danger"
+          @click="selectRecipeId(currentRecipe.nextId)"          
         >
           Next version <i class="bi bi-arrow-return-right"></i>
         </button>
@@ -66,11 +84,9 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const currentRecipe = computed(() => store.getters.currentRecipe);
-    const isEmpty = computed(
-      () => Object.keys(currentRecipe.value).length === 0
-    );
+    const isEmpty = computed(() => Object.keys(currentRecipe.value).length === 0);
     const updateRecipe = () => store.dispatch(ActionAppTypes.SET_EDITING);
-    const selectRecipeId = (nodeId) =>
+    const selectRecipeId = nodeId =>
       store.dispatch(ActionRecipeTypes.SET_SELECTED, nodeId);
 
     return {

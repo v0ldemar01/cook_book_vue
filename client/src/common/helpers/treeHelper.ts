@@ -3,7 +3,9 @@ import { ITreeNode } from "../models/recipe/tree";
 
 export const toTree = (recipes: IRecipe[]) => {
   const resultTree = [] as ITreeNode[];
-  recipes.forEach(recipe => mixinIngredientUpdated(recipes, recipe, recipe.ingredients));
+  recipes.forEach((recipe) =>
+    mixinIngredientUpdated(recipes, recipe, recipe.ingredients)
+  );
   const sortedRecipes = [
     ...recipes.filter((recipe) => !recipe.parentId),
     ...recipes.filter((recipe) => recipe.parentId),
@@ -26,7 +28,7 @@ export const toTree = (recipes: IRecipe[]) => {
 
       resultTree.some(
         (currentRecipeTree) =>
-          (recipeInTree = getById(
+          (recipeInTree = getNodeTreeById(
             currentRecipeTree,
             parentRecipe.id as string
           ) as ITreeNode)
@@ -40,7 +42,7 @@ export const toTree = (recipes: IRecipe[]) => {
         text: recipe.name,
         id: recipe.id,
         checkable: false,
-        selected: false,
+        selected: recipe.selected,
         expanded: false,
       } as ITreeNode);
     } else {
@@ -48,7 +50,7 @@ export const toTree = (recipes: IRecipe[]) => {
         text: recipe.name,
         id: recipe.id,
         checkable: false,
-        selected: false,
+        selected: recipe.selected,
         expanded: false,
       } as ITreeNode);
     }
@@ -62,13 +64,13 @@ export const toTree = (recipes: IRecipe[]) => {
   );
 };
 
-const getById = (tree: ITreeNode, id: string) => {
+export const getNodeTreeById = (tree: ITreeNode, id: string) => {
   let result;
   if (tree.id === id) {
     return tree;
   } else {
     if (tree.nodes) {
-      tree.nodes.some((node) => (result = getById(node, id)));
+      tree.nodes.some((node) => (result = getNodeTreeById(node, id)));
     }
     return result;
   }
@@ -76,10 +78,12 @@ const getById = (tree: ITreeNode, id: string) => {
 
 const mixinIngredientUpdated = (recipes, recipe, ingredients) => {
   if (recipe.prevId) {
-    const prevRecipe = recipes.find(thisRecipe => thisRecipe.id === recipe.prevId);
+    const prevRecipe = recipes.find(
+      (thisRecipe) => thisRecipe.id === recipe.prevId
+    );
     if (!prevRecipe) return;
-    return mixinIngredientUpdated(recipes, prevRecipe, ingredients)
+    return mixinIngredientUpdated(recipes, prevRecipe, ingredients);
   } else {
     recipe.ingredients = [...ingredients];
   }
-}
+};

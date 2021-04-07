@@ -38,16 +38,21 @@ export const recipeMutations: MutationTree<IRecipeState> & RecipeMutations = {
     state.recipes = [...state.recipes, newRecipe];
   },
   [RecipeMutationType.DELETE_RECIPE](state, id: string) {
+    console.log(state.recipes.length);
     state.recipes = state.recipes.filter((recipe) => recipe.id !== id);
+    console.log(state.recipes.length);
     if (state.currentRecipe.id === id) {
       state.currentRecipe = {} as IRecipe;
     }
   },
   [RecipeMutationType.SET_SELECTED](state, id: string) {
-    const currentRecipe = state.recipes.find((recipe) => recipe.id === id);
+    (state.currentRecipe.selected as boolean) = false;
+    const currentRecipe = state.recipes.find((recipe) => recipe.id === id);    
     state.currentRecipe = currentRecipe as IRecipe;
+    (state.currentRecipe.selected as boolean) = true;
   },
   [RecipeMutationType.CLEAR_SELECTED](state) {
+    (state.currentRecipe.selected as boolean) = false;
     state.currentRecipe = {} as IRecipe;
   },
   [RecipeMutationType.CLEAR_CLONE_RECIPE](state) {
